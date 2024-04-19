@@ -28,12 +28,12 @@ export class CreateTableReservations1713488561687
         },
         {
           name: 'checkIn',
-          type: 'timestamp',
+          type: 'date',
           isNullable: false,
         },
         {
           name: 'checkOut',
-          type: 'timestamp',
+          type: 'date',
           isNullable: false,
         },
         {

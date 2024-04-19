@@ -19,15 +19,18 @@ export class ReservationEntity {
   @Column({ name: 'guestName', nullable: false })
   guestName: string;
 
-  @Column({ name: 'checkIn', nullable: false })
+  @Column({ name: 'checkIn', nullable: false, type: 'date' })
   checkIn: Date;
 
-  @Column({ name: 'checkOut', nullable: false })
+  @Column({ name: 'checkOut', nullable: false, type: 'date' })
   checkOut: Date;
 
   @ManyToOne(() => RoomEntity, (room) => room.reservations)
   @JoinColumn()
   room: RoomEntity;
+
+  @Column({ name: 'roomId', nullable: false })
+  roomId: number;
 
   @CreateDateColumn()
   createdAt: string;

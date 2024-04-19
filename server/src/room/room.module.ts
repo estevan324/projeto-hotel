@@ -9,4 +9,4 @@ import { RoomEntity } from './entities/room.entity';
   controllers: [RoomController],
   providers: [RoomService],
 })
-export class UserModule {}
+export class RoomModule {}

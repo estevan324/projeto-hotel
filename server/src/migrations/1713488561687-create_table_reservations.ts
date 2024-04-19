@@ -18,6 +18,8 @@ export class CreateTableReservations1713488561687
           type: 'int',
           unsigned: true,
           isPrimary: true,
+          isGenerated: true,
+          generationStrategy: 'increment',
         },
         {
           name: 'guestName',

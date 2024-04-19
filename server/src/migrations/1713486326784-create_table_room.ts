@@ -11,6 +11,8 @@ export class CreateTableRoom1713486326784 implements MigrationInterface {
             type: 'int',
             unsigned: true,
             isPrimary: true,
+            isGenerated: true,
+            generationStrategy: 'increment',
           },
           {
             name: 'number',

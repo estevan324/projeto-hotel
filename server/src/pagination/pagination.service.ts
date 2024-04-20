@@ -17,8 +17,8 @@ export class PaginationService {
     });
 
     return {
-      rows: results,
       count: total,
+      rows: results,
     };
   }
 }

@@ -4,12 +4,14 @@ import { RoomEntity } from './entities/room.entity';
 import { Repository } from 'typeorm';
 import { CreateRoomDTO } from './dtos/create-room.dto';
 import { UpdateRoomDTO } from './dtos/update-room.dto';
+import { PaginationService } from 'src/pagination/pagination.service';
 
 @Injectable()
 export class RoomService {
   constructor(
     @InjectRepository(RoomEntity)
     private roomService: Repository<RoomEntity>,
+    private paginationService: PaginationService,
   ) {}
 
   private async exists(id: number) {
@@ -20,8 +22,8 @@ export class RoomService {
     return room;
   }
 
-  async findAll() {
-    return this.roomService.find();
+  async findAll(page?: number, limit?: number) {
+    return this.paginationService.paginate(this.roomService, page, limit);
   }
 
   async findOne(id: number) {

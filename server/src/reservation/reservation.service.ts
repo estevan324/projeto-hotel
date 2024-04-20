@@ -4,12 +4,14 @@ import { ReservationEntity } from './entities/reservation.entity';
 import { Repository } from 'typeorm';
 import { CreateReservationDTO } from './dtos/create-reservation.dto';
 import { UpdateReservationDTO } from './dtos/update-reservation.dto';
+import { PaginationService } from 'src/pagination/pagination.service';
 
 @Injectable()
 export class ReservationService {
   constructor(
     @InjectRepository(ReservationEntity)
     private reservationRepository: Repository<ReservationEntity>,
+    private paginationService: PaginationService,
   ) {}
 
   private async exists(id: number) {
@@ -23,8 +25,12 @@ export class ReservationService {
     return reservation;
   }
 
-  async findAll() {
-    return this.reservationRepository.find();
+  async findAll(page?: number, limit?: number) {
+    return this.paginationService.paginate(
+      this.reservationRepository,
+      page,
+      limit,
+    );
   }
 
   async findOne(id: number) {

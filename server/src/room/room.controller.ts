@@ -7,18 +7,23 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { RoomService } from './room.service';
 import { CreateRoomDTO } from './dtos/create-room.dto';
 import { UpdateRoomDTO } from './dtos/update-room.dto';
+import { OptionalIntPipe } from 'src/pipes/optional-int.pipe';
 
 @Controller('rooms')
 export class RoomController {
   constructor(private readonly roomService: RoomService) {}
 
   @Get()
-  async findAll() {
-    return this.roomService.findAll();
+  async findAll(
+    @Query('page', OptionalIntPipe) page?: number,
+    @Query('limit', OptionalIntPipe) limit?: number,
+  ) {
+    return this.roomService.findAll(page, limit);
   }
 
   @Get(':id')

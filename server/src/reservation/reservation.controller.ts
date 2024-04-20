@@ -7,11 +7,13 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ReservationService } from './reservation.service';
 import { CreateReservationDTO } from './dtos/create-reservation.dto';
 import { UpdateReservationDTO } from './dtos/update-reservation.dto';
 import { RoomService } from 'src/room/room.service';
+import { OptionalIntPipe } from 'src/pipes/optional-int.pipe';
 
 @Controller('reservations')
 export class ReservationController {
@@ -21,8 +23,11 @@ export class ReservationController {
   ) {}
 
   @Get()
-  async findAll() {
-    return this.reservationService.findAll();
+  async findAll(
+    @Query('page', OptionalIntPipe) page?: number,
+    @Query('limit', OptionalIntPipe) limit?: number,
+  ) {
+    return this.reservationService.findAll(page, limit);
   }
 
   @Get(':id')

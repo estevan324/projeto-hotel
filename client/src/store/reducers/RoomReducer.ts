@@ -3,11 +3,17 @@ import { PayloadAction } from "@reduxjs/toolkit";
 import { ROOMS } from "../types";
 
 interface RoomState {
-  rooms: Room[];
+  rooms: {
+    count: number;
+    rows: Room[];
+  };
 }
 
 const initialState: RoomState = {
-  rooms: [],
+  rooms: {
+    count: 0,
+    rows: [],
+  },
 };
 
 export default function RoomReducer(

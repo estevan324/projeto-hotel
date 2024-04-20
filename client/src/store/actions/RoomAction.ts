@@ -3,8 +3,21 @@ import { ROOMS } from "../types";
 import Room from "@/interfaces/Room";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-export const loadRoomsAction = createAsyncThunk<Room[]>(ROOMS, async () => {
-  const { data } = await api.get<Room[]>("/rooms");
+interface LoadRoomsAction {
+  page: number;
+  limit: number;
+}
 
-  return data;
-});
+export const loadRoomsAction = createAsyncThunk(
+  ROOMS,
+  async ({ page = 1, limit = 10 }: LoadRoomsAction) => {
+    const { data } = await api.get<{ rows: Room[]; count: number }>("/rooms", {
+      params: {
+        page,
+        limit,
+      },
+    });
+
+    return data;
+  }
+);

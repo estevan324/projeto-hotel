@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { navLinks } from "../configs/constants";
+import { navLinks } from "@/configs/constants";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 

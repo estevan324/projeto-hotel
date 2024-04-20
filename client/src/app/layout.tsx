@@ -3,6 +3,7 @@ import { Montserrat } from "next/font/google";
 import "@/styles/globals.scss";
 import BootstrapBundle from "@/components/configs/BootstrapBundle";
 import ReduxProvider from "@/store/ReduxProvider";
+import Navbar from "@/components/layout/Navbar";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -23,7 +24,10 @@ export default function RootLayout({
     <html lang="en">
       <BootstrapBundle />
       <body className={montserrat.className}>
-        <ReduxProvider>{children}</ReduxProvider>
+        <ReduxProvider>
+          <Navbar />
+          <div className="container mt-4">{children}</div>
+        </ReduxProvider>
       </body>
     </html>
   );

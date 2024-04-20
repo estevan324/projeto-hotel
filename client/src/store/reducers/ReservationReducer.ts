@@ -1,5 +1,5 @@
 import Reservation from "@/interfaces/Reservation";
-import { Action } from "@reduxjs/toolkit";
+import { PayloadAction } from "@reduxjs/toolkit";
 
 interface ReservationState {
   reservations: Reservation[];
@@ -11,7 +11,7 @@ const initialState: ReservationState = {
 
 export default function ReservationReducer(
   state = initialState,
-  action: Action
+  action: PayloadAction
 ) {
   switch (action.type) {
     default:

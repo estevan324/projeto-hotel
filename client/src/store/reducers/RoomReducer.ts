@@ -1,5 +1,6 @@
 import Room from "@/interfaces/Room";
 import { PayloadAction } from "@reduxjs/toolkit";
+import { ROOMS } from "../types";
 
 interface RoomState {
   rooms: Room[];
@@ -14,6 +15,11 @@ export default function RoomReducer(
   action: PayloadAction
 ) {
   switch (action.type) {
+    case `${ROOMS}/fulfilled`:
+      return {
+        ...state,
+        rooms: action.payload,
+      };
     default:
       return state;
   }

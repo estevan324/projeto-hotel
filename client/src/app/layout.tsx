@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "@/styles/globals.scss";
 import BootstrapBundle from "@/components/configs/BootstrapBundle";
+import ReduxProvider from "@/store/ReduxProvider";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -21,7 +22,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <BootstrapBundle />
-      <body className={montserrat.className}>{children}</body>
+      <body className={montserrat.className}>
+        <ReduxProvider>{children}</ReduxProvider>
+      </body>
     </html>
   );
 }

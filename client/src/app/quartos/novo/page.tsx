@@ -6,7 +6,11 @@ export default function CreateRoomPage() {
     <div className="container">
       <h4>Cadastrar novo quarto</h4>
       <hr />
-      <RoomForm />
+      <div className="row">
+        <div className="col-md-6 mx-auto">
+          <RoomForm />
+        </div>
+      </div>
     </div>
   );
 }

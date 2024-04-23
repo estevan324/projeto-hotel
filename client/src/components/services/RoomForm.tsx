@@ -6,6 +6,10 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ERROR_MESSAGES } from "@/configs/constants";
+import { connect } from "react-redux";
+import { Dispatch, bindActionCreators } from "@reduxjs/toolkit";
+import { saveRoomAction } from "@/store/actions/RoomAction";
+import { useRouter } from "next/navigation";
 
 const RoomFormSchema = z.object({
   number: z
@@ -27,7 +31,20 @@ const RoomFormSchema = z.object({
     .min(1, { message: ERROR_MESSAGES.min(1) }),
 });
 
-export default function RoomForm() {
+const mapDispatchToProps = (dispatch: Dispatch) =>
+  bindActionCreators(
+    {
+      saveRoom: saveRoomAction,
+    },
+    dispatch
+  );
+
+interface DispatchProps extends ReturnType<typeof mapDispatchToProps> {}
+interface RoomFormProps extends DispatchProps {
+  id?: number;
+}
+
+function RoomForm({ saveRoom }: RoomFormProps) {
   const {
     handleSubmit,
     register,
@@ -36,8 +53,11 @@ export default function RoomForm() {
     resolver: zodResolver(RoomFormSchema),
   });
 
-  const handleFormSubmit: SubmitHandler<Room> = (data) => {
-    console.log(data);
+  const router = useRouter();
+
+  const handleFormSubmit: SubmitHandler<Room> = async (data) => {
+    saveRoom(data);
+    router.push("/");
   };
 
   return (
@@ -95,11 +115,19 @@ export default function RoomForm() {
           {errors.pricePerNight && errors.pricePerNight.message}
         </div>
       </div>
-      <input
-        type="submit"
-        className="btn btn-primary"
-        value="Cadastrar quarto"
-      />
+      <div className="row justify-content-center">
+        <div className="col-lg-2 col-md-3">
+          <div className="d-grid">
+            <input
+              type="submit"
+              className="btn btn-primary"
+              value="Cadastrar quarto"
+            />
+          </div>
+        </div>
+      </div>
     </form>
   );
 }
+
+export default connect(null, mapDispatchToProps)(RoomForm);

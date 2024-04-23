@@ -7,6 +7,7 @@ import Navbar from "@/components/layout/Navbar";
 import { ToastContainer } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
+import "react-confirm-alert/src/react-confirm-alert.css";
 
 const montserrat = Montserrat({
   subsets: ["latin"],

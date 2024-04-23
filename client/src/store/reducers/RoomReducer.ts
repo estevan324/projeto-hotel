@@ -1,6 +1,6 @@
 import Room from "@/interfaces/Room";
 import { PayloadAction } from "@reduxjs/toolkit";
-import { ROOMS } from "../types";
+import { DELETE_ROOM, ROOMS } from "../types";
 
 interface RoomState {
   rooms: {
@@ -25,6 +25,16 @@ export default function RoomReducer(
       return {
         ...state,
         rooms: action.payload,
+      };
+    case `${DELETE_ROOM}/fulfilled`:
+      const id = action.payload as unknown as number;
+
+      return {
+        ...state,
+        rooms: {
+          ...state.rooms,
+          rows: state.rooms.rows.filter((room) => room.id !== id),
+        },
       };
     default:
       return state;

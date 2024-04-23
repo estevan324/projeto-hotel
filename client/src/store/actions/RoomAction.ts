@@ -1,5 +1,5 @@
 import api from "@/configs/api";
-import { ROOMS, SAVE_ROOM } from "../types";
+import { DELETE_ROOM, ROOMS, SAVE_ROOM } from "../types";
 import Room from "@/interfaces/Room";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
@@ -46,6 +46,33 @@ export const saveRoomAction = createAsyncThunk(
     } catch (error) {
       toast.update(id, {
         render: "Erro ao salvar quarto",
+        type: "error",
+        isLoading: false,
+        autoClose: 2000,
+      });
+    }
+  }
+);
+
+export const deleteRoomAction = createAsyncThunk(
+  DELETE_ROOM,
+  async (id: number) => {
+    const toastId = toast.loading("Excluindo quarto...");
+
+    try {
+      await api.delete(`/rooms/${id}`);
+
+      toast.update(toastId, {
+        render: "Quarto excluído com sucesso!",
+        type: "success",
+        isLoading: false,
+        autoClose: 2000,
+      });
+
+      return id;
+    } catch (error) {
+      toast.update(toastId, {
+        render: "Erro ao excluir quarto",
         type: "error",
         isLoading: false,
         autoClose: 2000,

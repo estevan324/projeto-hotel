@@ -63,7 +63,7 @@ function RoomDataTable({ loadRooms, rooms, deleteRoom }: RoomDataTableProps) {
         <div className="row gap-2 justify-content-center align-items-center">
           <div className="col col-md-auto p-0">
             <Link
-              href={`/quartos/${row.id}/editar`}
+              href={`/quartos/editar/${row.id}`}
               className="btn btn-warning"
             >
               <FaPen />

@@ -1,15 +1,20 @@
 "use client";
 
 import Room from "@/interfaces/Room";
-import React from "react";
+import React, { use, useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ERROR_MESSAGES } from "@/configs/constants";
 import { connect } from "react-redux";
 import { Dispatch, bindActionCreators } from "@reduxjs/toolkit";
-import { saveRoomAction } from "@/store/actions/RoomAction";
+import {
+  loadRoomByIdAction,
+  resetRoomAction,
+  saveRoomAction,
+} from "@/store/actions/RoomAction";
 import { useRouter } from "next/navigation";
+import { RootState } from "@/store";
 
 const RoomFormSchema = z.object({
   number: z
@@ -31,23 +36,37 @@ const RoomFormSchema = z.object({
     .min(1, { message: ERROR_MESSAGES.min(1) }),
 });
 
+const mapStateToProps = (state: RootState) => ({
+  room: state.room.room,
+});
+
 const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       saveRoom: saveRoomAction,
+      loadRoomById: loadRoomByIdAction,
+      resetRoom: resetRoomAction,
     },
     dispatch
   );
 
+interface StateProps extends ReturnType<typeof mapStateToProps> {}
 interface DispatchProps extends ReturnType<typeof mapDispatchToProps> {}
-interface RoomFormProps extends DispatchProps {
+interface RoomFormProps extends StateProps, DispatchProps {
   id?: number;
 }
 
-function RoomForm({ saveRoom }: RoomFormProps) {
+function RoomForm({
+  id,
+  saveRoom,
+  room,
+  loadRoomById,
+  resetRoom,
+}: RoomFormProps) {
   const {
     handleSubmit,
     register,
+    setValue,
     formState: { errors },
   } = useForm<Room>({
     resolver: zodResolver(RoomFormSchema),
@@ -55,8 +74,28 @@ function RoomForm({ saveRoom }: RoomFormProps) {
 
   const router = useRouter();
 
+  useEffect(() => {
+    if (id) {
+      loadRoomById(id);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    if (room) {
+      setValue("number", room.number);
+      setValue("type", room.type);
+      setValue("pricePerNight", room.pricePerNight);
+    }
+  }, [room]);
+
+  useEffect(() => {
+    return () => {
+      resetRoom();
+    };
+  }, []);
+
   const handleFormSubmit: SubmitHandler<Room> = async (data) => {
-    saveRoom(data);
+    saveRoom({ room: data, id });
     router.push("/");
   };
 
@@ -121,7 +160,7 @@ function RoomForm({ saveRoom }: RoomFormProps) {
             <input
               type="submit"
               className="btn btn-primary"
-              value="Cadastrar quarto"
+              value="Salvar quarto"
             />
           </div>
         </div>
@@ -130,4 +169,4 @@ function RoomForm({ saveRoom }: RoomFormProps) {
   );
 }
 
-export default connect(null, mapDispatchToProps)(RoomForm);
+export default connect(mapStateToProps, mapDispatchToProps)(RoomForm);

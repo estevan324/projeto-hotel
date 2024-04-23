@@ -1,12 +1,13 @@
 import Room from "@/interfaces/Room";
 import { PayloadAction } from "@reduxjs/toolkit";
-import { DELETE_ROOM, ROOMS } from "../types";
+import { DELETE_ROOM, LOAD_ROOM_BY_ID, ROOMS, SAVE_ROOM } from "../types";
 
 interface RoomState {
   rooms: {
     count: number;
     rows: Room[];
   };
+  room: Room | null;
 }
 
 const initialState: RoomState = {
@@ -14,6 +15,7 @@ const initialState: RoomState = {
     count: 0,
     rows: [],
   },
+  room: null,
 };
 
 export default function RoomReducer(
@@ -26,6 +28,18 @@ export default function RoomReducer(
         ...state,
         rooms: action.payload,
       };
+    case `${SAVE_ROOM}/reset`: {
+      return {
+        ...state,
+        room: initialState.room,
+      };
+    }
+    case `${LOAD_ROOM_BY_ID}/fulfilled`: {
+      return {
+        ...state,
+        room: action.payload,
+      };
+    }
     case `${DELETE_ROOM}/fulfilled`:
       const id = action.payload as unknown as number;
 

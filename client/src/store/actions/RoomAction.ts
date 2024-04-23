@@ -1,5 +1,5 @@
 import api from "@/configs/api";
-import { DELETE_ROOM, ROOMS, SAVE_ROOM } from "../types";
+import { DELETE_ROOM, LOAD_ROOM_BY_ID, ROOMS, SAVE_ROOM } from "../types";
 import Room from "@/interfaces/Room";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
@@ -23,19 +23,28 @@ export const loadRoomsAction = createAsyncThunk(
   }
 );
 
+export const loadRoomByIdAction = createAsyncThunk(
+  LOAD_ROOM_BY_ID,
+  async (id: number) => {
+    const { data } = await api.get<Room>(`/rooms/${id}`);
+
+    return data;
+  }
+);
+
 export const saveRoomAction = createAsyncThunk(
   SAVE_ROOM,
-  async (room: Room) => {
-    const id = toast.loading("Salvando quarto...");
+  async ({ room, id }: { room: Room; id?: number }) => {
+    const t = toast.loading("Salvando quarto...");
 
     try {
-      if (room.id) {
-        await api.patch(`/rooms/${room.id}`, room);
+      if (id) {
+        await api.patch(`/rooms/${id}`, room);
       } else {
         await api.post("/rooms", room);
       }
 
-      toast.update(id, {
+      toast.update(t, {
         render: "Quarto salvo com sucesso!",
         type: "success",
         isLoading: false,
@@ -44,7 +53,7 @@ export const saveRoomAction = createAsyncThunk(
 
       return room;
     } catch (error) {
-      toast.update(id, {
+      toast.update(t, {
         render: "Erro ao salvar quarto",
         type: "error",
         isLoading: false,
@@ -53,6 +62,10 @@ export const saveRoomAction = createAsyncThunk(
     }
   }
 );
+
+export const resetRoomAction = () => ({
+  type: `${SAVE_ROOM}/reset`,
+});
 
 export const deleteRoomAction = createAsyncThunk(
   DELETE_ROOM,

@@ -6,7 +6,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ERROR_MESSAGES } from "@/configs/constants";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { Dispatch, bindActionCreators } from "@reduxjs/toolkit";
 import {
   loadRoomByIdAction,
@@ -14,7 +14,7 @@ import {
   saveRoomAction,
 } from "@/store/actions/RoomAction";
 import { useRouter } from "next/navigation";
-import { RootState } from "@/store";
+import { AppDispatch, RootState } from "@/store";
 
 const RoomFormSchema = z.object({
   number: z
@@ -43,7 +43,6 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      saveRoom: saveRoomAction,
       loadRoomById: loadRoomByIdAction,
       resetRoom: resetRoomAction,
     },
@@ -56,13 +55,7 @@ interface RoomFormProps extends StateProps, DispatchProps {
   id?: number;
 }
 
-function RoomForm({
-  id,
-  saveRoom,
-  room,
-  loadRoomById,
-  resetRoom,
-}: RoomFormProps) {
+function RoomForm({ id, room, loadRoomById, resetRoom }: RoomFormProps) {
   const {
     handleSubmit,
     register,
@@ -94,9 +87,13 @@ function RoomForm({
     };
   }, []);
 
+  const dispatch: AppDispatch = useDispatch();
   const handleFormSubmit: SubmitHandler<Room> = async (data) => {
-    saveRoom({ room: data, id });
-    router.push("/");
+    const result = await dispatch(saveRoomAction({ room: data, id }));
+
+    if (result.type.includes("fulfilled")) {
+      router.push("/");
+    }
   };
 
   return (

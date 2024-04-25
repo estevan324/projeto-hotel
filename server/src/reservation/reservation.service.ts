@@ -32,7 +32,7 @@ export class ReservationService {
   private async checkOutIsAfterCheckIn(checkIn: Date, checkOut: Date) {
     if (checkOut <= checkIn) {
       throw new BadRequestException(
-        'Check-out date must be after check-in date',
+        'A data de saída deve ser posterior à data de entrada',
       );
     }
 
@@ -53,7 +53,7 @@ export class ReservationService {
 
     if (reservation) {
       throw new BadRequestException(
-        'Reservation dates overlap with another reservation',
+        'Existe uma reserva para o quarto nesse período',
       );
     }
 

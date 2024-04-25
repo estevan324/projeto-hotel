@@ -70,8 +70,22 @@ function RoomDataTable({ loadRooms, rooms, deleteRoom }: RoomDataTableProps) {
             </Link>
           </div>
           <div className="col col-md-auto p-0 ">
-            <DeleteButton handleDelete={() => handleDelete(row.id)} />
+            <DeleteButton
+              handleDelete={() => row?.id && handleDelete(row.id)}
+            />
           </div>
+        </div>
+      ),
+    },
+    {
+      cell: (row) => (
+        <div className="col col-md-auto">
+          <Link
+            href={`/quartos/reservar/${row.id}`}
+            className="btn btn-primary"
+          >
+            Reservar
+          </Link>
         </div>
       ),
     },

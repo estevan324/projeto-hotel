@@ -54,8 +54,6 @@ export class ReservationService {
       },
     });
 
-    console.log(reservationId);
-
     if (reservation) {
       throw new BadRequestException(
         'Existe uma reserva para o quarto nesse período',

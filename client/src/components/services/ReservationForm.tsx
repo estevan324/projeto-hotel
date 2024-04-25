@@ -73,11 +73,8 @@ function ReservationForm({
   }, [roomId]);
 
   useEffect(() => {
-    console.log(id);
     if (id) loadReservationById(id);
   }, [id]);
-
-  console.log(errors);
 
   useEffect(() => {
     if (reservation) {

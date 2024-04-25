@@ -14,6 +14,7 @@ import DataTableComponent from "../utils/DataTableComponent";
 import Link from "next/link";
 import { FaPen } from "react-icons/fa";
 import DeleteButton from "../utils/DeleteButton";
+import dayjs from "dayjs";
 
 const mapStateToProps = (state: RootState) => ({
   reservations: state.reservation.reservations || { rows: [], count: 0 },
@@ -53,11 +54,11 @@ function ReservationDataTable({
     },
     {
       name: "Data de entrada",
-      cell: (row) => new Date(row.checkIn).toLocaleDateString(),
+      cell: (row) => dayjs(row.checkIn).format("DD/MM/YYYY"),
     },
     {
       name: "Data de saída",
-      cell: (row) => new Date(row.checkOut).toLocaleDateString(),
+      cell: (row) => dayjs(row.checkOut).format("DD/MM/YYYY"),
     },
     {
       name: "Ações",

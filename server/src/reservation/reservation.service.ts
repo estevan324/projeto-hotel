@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ReservationEntity } from './entities/reservation.entity';
-import { Between, Repository } from 'typeorm';
+import { Between, Not, Repository } from 'typeorm';
 import { CreateReservationDTO } from './dtos/create-reservation.dto';
 import { UpdateReservationDTO } from './dtos/update-reservation.dto';
 import { PaginationService } from 'src/pagination/pagination.service';
@@ -43,13 +43,18 @@ export class ReservationService {
     roomId: number,
     checkIn: Date,
     checkOut: Date,
+    reservationId?: number,
   ) {
     const reservation = await this.reservationRepository.findOne({
       where: {
         roomId,
         checkIn: Between(checkIn, checkOut),
+        checkOut: Between(checkIn, checkOut),
+        id: reservationId ? Not(reservationId) : null,
       },
     });
+
+    console.log(reservationId);
 
     if (reservation) {
       throw new BadRequestException(
@@ -60,11 +65,12 @@ export class ReservationService {
     return true;
   }
 
-  async findAll(page?: number, limit?: number) {
+  async findAll(page?: number, limit?: number, roomId?: number) {
     return this.paginationService.paginate(
       this.reservationRepository,
       page,
       limit,
+      { roomId },
     );
   }
 
@@ -84,7 +90,12 @@ export class ReservationService {
     const room = await this.exists(id);
 
     await this.checkOutIsAfterCheckIn(data.checkIn, data.checkOut);
-    await this.hasOverlappingDates(room.room.id, data.checkIn, data.checkOut);
+    await this.hasOverlappingDates(
+      room.room.id,
+      data.checkIn,
+      data.checkOut,
+      id,
+    );
 
     this.reservationRepository.merge(room, data);
 

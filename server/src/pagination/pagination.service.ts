@@ -7,6 +7,7 @@ export class PaginationService {
     repository: Repository<T>,
     page: number = 1,
     limit: number = 10,
+    where: any = {},
   ): Promise<{ rows: T[]; count: number }> {
     page = Math.max(1, page);
     limit = Math.max(1, limit);
@@ -14,6 +15,7 @@ export class PaginationService {
     const [results, total] = await repository.findAndCount({
       take: limit,
       skip: (page - 1) * limit,
+      where,
     });
 
     return {

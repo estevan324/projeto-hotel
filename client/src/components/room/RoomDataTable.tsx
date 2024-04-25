@@ -7,7 +7,7 @@ import { Dispatch, bindActionCreators } from "@reduxjs/toolkit";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { TableColumn } from "react-data-table-component";
-import { FaPen, FaTrash } from "react-icons/fa";
+import { FaEye, FaPen, FaTrash } from "react-icons/fa";
 import { connect } from "react-redux";
 import DataTableComponent from "../utils/DataTableComponent";
 import DeleteButton from "../utils/DeleteButton";
@@ -61,6 +61,11 @@ function RoomDataTable({ loadRooms, rooms, deleteRoom }: RoomDataTableProps) {
       name: "Ações",
       cell: (row) => (
         <div className="row gap-2 justify-content-center align-items-center">
+          <div className="col col-md-auto p-0">
+            <Link href={`/quartos/reservas/${row.id}`} className="btn btn-info">
+              <FaEye />
+            </Link>
+          </div>
           <div className="col col-md-auto p-0">
             <Link
               href={`/quartos/editar/${row.id}`}

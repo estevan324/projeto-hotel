@@ -1,10 +1,47 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import Reservation from "@/interfaces/Reservation";
-import { SAVE_RESERVATION } from "../types";
+import {
+  LOAD_RESERVATION_BY_ID,
+  RESERVATIONS,
+  SAVE_RESERVATION,
+} from "../types";
 import { toast } from "react-toastify";
 import api from "@/configs/api";
 import { AxiosError } from "axios";
 import NestError from "@/interfaces/NestError";
+
+interface LoadReservationsAction {
+  page: number;
+  limit: number;
+  roomId?: number;
+}
+
+export const loadReservationsAction = createAsyncThunk(
+  RESERVATIONS,
+  async ({ page = 1, limit = 10, roomId }: LoadReservationsAction) => {
+    const { data } = await api.get<{ rows: Reservation[]; count: number }>(
+      "/reservations",
+      {
+        params: {
+          page,
+          limit,
+          roomId,
+        },
+      }
+    );
+
+    return data;
+  }
+);
+
+export const loadReservationByIdAction = createAsyncThunk(
+  LOAD_RESERVATION_BY_ID,
+  async (id: number) => {
+    const { data } = await api.get<Reservation>(`/reservations/${id}`);
+
+    return data;
+  }
+);
 
 export const saveReservationAction = createAsyncThunk(
   SAVE_RESERVATION,
@@ -13,7 +50,7 @@ export const saveReservationAction = createAsyncThunk(
 
     try {
       if (id) {
-        await api.patch(`/reservation/${id}`, reservation);
+        await api.patch(`/reservations/${id}`, reservation);
       } else {
         await api.post("/reservations", reservation);
       }

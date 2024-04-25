@@ -26,8 +26,9 @@ export class ReservationController {
   async findAll(
     @Query('page', OptionalIntPipe) page?: number,
     @Query('limit', OptionalIntPipe) limit?: number,
+    @Query('roomId', OptionalIntPipe) roomId?: number,
   ) {
-    return this.reservationService.findAll(page, limit);
+    return this.reservationService.findAll(page, limit, roomId);
   }
 
   @Get(':id')

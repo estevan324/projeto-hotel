@@ -2,9 +2,13 @@
 
 import { ERROR_MESSAGES } from "@/configs/constants";
 import Reservation from "@/interfaces/Reservation";
-import { AppDispatch } from "@/store";
-import { saveReservationAction } from "@/store/actions/ReservationAction";
+import { AppDispatch, RootState } from "@/store";
+import {
+  loadReservationByIdAction,
+  saveReservationAction,
+} from "@/store/actions/ReservationAction";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { bindActionCreators } from "@reduxjs/toolkit";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -27,11 +31,32 @@ const ReservationFormSchema = z.object({
   roomId: z.number(),
 });
 
-interface ReservationFormProps {
-  roomId: number;
+const mapStateToProps = (state: RootState) => ({
+  reservation: state.reservation.reservation,
+});
+
+const mapDispatchToProps = (dispatch: AppDispatch) =>
+  bindActionCreators(
+    {
+      loadReservationById: loadReservationByIdAction,
+    },
+    dispatch
+  );
+
+interface StateProps extends ReturnType<typeof mapStateToProps> {}
+interface DispatchProps extends ReturnType<typeof mapDispatchToProps> {}
+
+interface ReservationFormProps extends StateProps, DispatchProps {
+  roomId?: number;
+  id?: number;
 }
 
-function ReservationForm({ roomId }: ReservationFormProps) {
+function ReservationForm({
+  roomId,
+  id,
+  reservation,
+  loadReservationById,
+}: ReservationFormProps) {
   const {
     handleSubmit,
     register,
@@ -44,12 +69,30 @@ function ReservationForm({ roomId }: ReservationFormProps) {
   const router = useRouter();
 
   useEffect(() => {
-    setValue("roomId", Number(roomId));
+    if (roomId) setValue("roomId", Number(roomId));
   }, [roomId]);
+
+  useEffect(() => {
+    console.log(id);
+    if (id) loadReservationById(id);
+  }, [id]);
+
+  console.log(errors);
+
+  useEffect(() => {
+    if (reservation) {
+      setValue("guestName", reservation.guestName);
+      setValue("checkIn", reservation.checkIn);
+      setValue("checkOut", reservation.checkOut);
+      setValue("roomId", Number(reservation.roomId));
+    }
+  }, [reservation]);
 
   const dispatch: AppDispatch = useDispatch();
   const handleSubmitForm: SubmitHandler<Reservation> = async (data) => {
-    const result = await dispatch(saveReservationAction({ reservation: data }));
+    const result = await dispatch(
+      saveReservationAction({ reservation: data, id })
+    );
 
     if (result.type.includes("fulfilled")) {
       router.back();
@@ -116,4 +159,4 @@ function ReservationForm({ roomId }: ReservationFormProps) {
   );
 }
 
-export default connect(null, null)(ReservationForm);
+export default connect(mapStateToProps, mapDispatchToProps)(ReservationForm);

@@ -1,4 +1,14 @@
-# Passo 1: Configurar banco de dados
+# Projeto de Reservas de Quartos
+
+Para o desenvolvimento deste projeto, foi utilizado o framework Next.js para o frontend e o framework Nest.js para o backend. O banco de dados utilizado foi o MySQL.
+
+Juntamente com o Nest.js, foi utilizado o TypeORM para a conexão com o banco de dados e a criação das tabelas.
+
+Para o gerenciamento de estados, foi utilizado o Redux.
+
+Segue abaixo as instruções para execução do projeto.
+
+## Passo 1: Configurar banco de dados
 
 Para configurar o banco de dados, você deve criar um arquivo chamado `.env` na raiz da pasta `server` e preencher as variáveis de ambiente conforme o exemplo abaixo:
 
@@ -12,7 +22,7 @@ DB_PASSWORD=student
 
 OBS: O banco de dados deve ser criado manualmente, e o usuário e senha devem ter permissões de leitura e escrita. Não é necessário criar as tabelas, pois o projeto irá criá-las automaticamente.
 
-# Passo 2: Instalar dependências
+## Passo 2: Instalar dependências
 
 Para instalar as dependências do projeto, execute os comandos abaixo:
 
@@ -26,7 +36,7 @@ cd client
 npm install
 ```
 
-# Passo 3: Executar o projeto
+## Passo 3: Executar o projeto
 
 Para executar o projeto, execute os comandos abaixo:
 
@@ -42,7 +52,7 @@ npm run build
 npm start
 ```
 
-# Passo 4: Acessar o projeto
+## Passo 4: Acessar o projeto
 
 Após executar os comandos acima, acesse o projeto através do endereço `http://localhost:3000`.
 

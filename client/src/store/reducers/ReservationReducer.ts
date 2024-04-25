@@ -1,6 +1,10 @@
 import Reservation from "@/interfaces/Reservation";
 import { PayloadAction } from "@reduxjs/toolkit";
-import { LOAD_RESERVATION_BY_ID, RESERVATIONS } from "../types";
+import {
+  DELETE_RESERVATION,
+  LOAD_RESERVATION_BY_ID,
+  RESERVATIONS,
+} from "../types";
 
 interface ReservationState {
   reservations: { count: number; rows: Reservation[] };
@@ -26,6 +30,16 @@ export default function ReservationReducer(
       return {
         ...state,
         reservation: action.payload,
+      };
+    case `${DELETE_RESERVATION}/fulfilled`:
+      return {
+        ...state,
+        reservations: {
+          ...state.reservations,
+          rows: state.reservations.rows.filter(
+            (reservation) => reservation.id !== action.payload
+          ),
+        },
       };
     default:
       return state;

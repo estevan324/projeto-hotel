@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import Reservation from "@/interfaces/Reservation";
 import {
+  DELETE_RESERVATION,
   LOAD_RESERVATION_BY_ID,
   RESERVATIONS,
   SAVE_RESERVATION,
@@ -68,6 +69,37 @@ export const saveReservationAction = createAsyncThunk(
 
       toast.update(t, {
         render: err.response?.data.message || "Erro ao salvar reserva",
+        type: "error",
+        isLoading: false,
+        autoClose: 2000,
+      });
+
+      return Promise.reject(err);
+    }
+  }
+);
+
+export const deleteReservationAction = createAsyncThunk(
+  DELETE_RESERVATION,
+  async (id: number) => {
+    const t = toast.loading("Deletando reserva...");
+
+    try {
+      await api.delete(`/reservations/${id}`);
+
+      toast.update(t, {
+        render: "Reserva deletada com sucesso!",
+        type: "success",
+        isLoading: false,
+        autoClose: 2000,
+      });
+
+      return id;
+    } catch (error) {
+      const err = error as AxiosError<NestError>;
+
+      toast.update(t, {
+        render: err.response?.data.message || "Erro ao deletar reserva",
         type: "error",
         isLoading: false,
         autoClose: 2000,

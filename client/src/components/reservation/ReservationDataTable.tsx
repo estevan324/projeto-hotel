@@ -2,7 +2,10 @@
 
 import Reservation from "@/interfaces/Reservation";
 import { AppDispatch, RootState } from "@/store";
-import { loadReservationsAction } from "@/store/actions/ReservationAction";
+import {
+  deleteReservationAction,
+  loadReservationsAction,
+} from "@/store/actions/ReservationAction";
 import { bindActionCreators } from "@reduxjs/toolkit";
 import React, { useEffect, useState } from "react";
 import { TableColumn } from "react-data-table-component";
@@ -20,6 +23,7 @@ const mapDispatchToProps = (dispatch: AppDispatch) =>
   bindActionCreators(
     {
       loadReservations: loadReservationsAction,
+      deleteReservation: deleteReservationAction,
     },
     dispatch
   );
@@ -34,6 +38,7 @@ function ReservationDataTable({
   roomId,
   loadReservations,
   reservations,
+  deleteReservation,
 }: ReservationDataTableProps) {
   const [pagination, setPagination] = useState({ page: 1, limit: 10 });
 
@@ -67,7 +72,9 @@ function ReservationDataTable({
             </Link>
           </div>
           <div className="col col-md-auto p-0 ">
-            <DeleteButton handleDelete={() => {}} />
+            <DeleteButton
+              handleDelete={() => row.id && deleteReservation(row.id)}
+            />
           </div>
         </div>
       ),

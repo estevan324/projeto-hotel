@@ -71,6 +71,7 @@ export class ReservationService {
       page,
       limit,
       { roomId },
+      { ['checkIn']: 'DESC' },
     );
   }
 

@@ -8,6 +8,7 @@ export class PaginationService {
     page: number = 1,
     limit: number = 10,
     where: any = {},
+    order: any = {},
   ): Promise<{ rows: T[]; count: number }> {
     page = Math.max(1, page);
     limit = Math.max(1, limit);
@@ -16,6 +17,7 @@ export class PaginationService {
       take: limit,
       skip: (page - 1) * limit,
       where,
+      order,
     });
 
     return {

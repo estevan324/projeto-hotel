@@ -50,4 +50,4 @@ A página inicial exibirá uma lista de quartos cadastrados no banco de dados. P
 
 Caso queira editar ou excluir um quarto, clique no ícone de lápis ou lixeira ao lado do quarto desejado.
 
-A visualização das reservas é feita através do ícone de olho, o que te redirecionará para a página de reservas do quarto selecionado. Nessa página, você poderá visualizar as reservas já cadastradas, podendo excluí-las ou editá-las. Para cadastrar uma nova reserva, volte a página principal e cliquen o botão "Reservar" ao lado do quarto desejado.
+A visualização das reservas é feita através do ícone de olho, o que te redirecionará para a página de reservas do quarto selecionado. Nessa página, você poderá visualizar as reservas já cadastradas, podendo excluí-las ou editá-las. Para cadastrar uma nova reserva, volte a página principal e clique no botão "Reservar" ao lado do quarto desejado.
